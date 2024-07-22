@@ -683,13 +683,13 @@ func (a *Adapter) RemovePolicyCtx(ctx context.Context, sec string, ptype string,
 }
 
 // AddPolicies adds multiple policy rules to the storage.
-func (a *Adapter) AddPolicies(sec string, ptype string, rules [][]string) error {
+func (a *Adapter) AddPoliciesCtx(ctx context.Context, sec string, ptype string, rules [][]string) error {
 	var lines []CasbinRule
 	for _, rule := range rules {
 		line := a.savePolicyLine(ptype, rule)
 		lines = append(lines, line)
 	}
-	return a.db.Create(&lines).Error
+	return a.db.WithContext(ctx).Create(&lines).Error
 }
 
 // Transaction perform a set of operations within a transaction
